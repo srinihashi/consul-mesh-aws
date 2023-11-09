@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: checkoutservice
+spec:
+  selector:
+    matchLabels:
+      app: checkoutservice
+  template:
+    metadata:
+      labels:
+        app: checkoutservice
+      annotations: # CONSUL
+        consul.hashicorp.com/connect-inject: 'true' # CONSUL
+        consul.hashicorp.com/connect-service-upstreams: 'productcatalogservice:3550,shippingservice:50052,paymentservice:50051,emailservice:5000,currencyservice:7000,cartservice:7070' # CONSUL
+    spec:
+      containers:
+        - name: server
+          image: gcr.io/google-samples/microservices-demo/checkoutservice:v0.8.0
+          ports:
+          - containerPort: 5050
+          env:
+          - name: PORT
+            value: "5050"
+          - name: PRODUCT_CATALOG_SERVICE_ADDR
+            value: "localhost:3550" # CONSUL
+            #value: "productcatalogservice:3550"
+          - name: SHIPPING_SERVICE_ADDR
+            value: "localhost:50052" # CONSUL
+            #value: "shippingservice:50052"
+          - name: PAYMENT_SERVICE_ADDR
+            value: "localhost:50051" # CONSUL
+            #value: "paymentservice:50051"
+          - name: EMAIL_SERVICE_ADDR
+            value: "localhost:5000" # CONSUL
+            #value: "emailservice:5000"
+          - name: CURRENCY_SERVICE_ADDR
+            value: "localhost:7000" # CONSUL
+            #value: "currencyservice:7000"
+          - name: CART_SERVICE_ADDR
+            value: "localhost:7070" # CONSUL
+            #value: "cartservice:7070"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: checkoutservice
+spec:
+  type: ClusterIP
+  selector:
+    app: checkoutservice
+  ports:
+  - protocol: TCP
+    port: 5050
+    targetPort: 5050
+
+---

@@ -8,14 +8,22 @@ global:
   # The consul image version.
   image: hashicorp/consul:1.16.0
   # The name of the datacenter that the agents should register as.
-  datacenter: dc1
-  # Enables TLS across the cluster to verify authenticity of the Consul servers and clients.
+  datacenter: eks
+  # Enable gossip encryption
+  #gossipEncryption:
+  #  enabled: false
+  # Enable cluster peering
+  peering:
+    enabled: true
+    # Enables TLS across the cluster to verify authenticity of the Consul servers and clients.
   tls:
     enabled: true
+    #enableAutoEncrypt: true
+ 
   # Enables ACLs across the cluster to secure access to data and APIs.
-  acls:
+    acls:
     # If true, automatically manage ACL tokens and policies for all Consul components.
-    manageSystemACLs: true
+    manageSystemACLs: false
 # Configures values that configure the Consul server cluster.
 server:
   enabled: true
@@ -26,7 +34,17 @@ ui:
   enabled: true
   # Registers a Kubernetes Service for the Consul UI as a LoadBalancer.
   service:
+    enabled: true
     type: LoadBalancer
 # Configures and installs the automatic Consul Connect sidecar injector.
 connectInject:
+  enabled: true
+  default: false
+# MeshGateway is a Consul Connect feature that allows for terminating TLS
+meshGateway:
+  enabled: true
+  # The number of Mesh Gateways to run. This determines the fault tolerance of the cluster.
+  replicas: 1
+# Enable Controller
+controller:
   enabled: true

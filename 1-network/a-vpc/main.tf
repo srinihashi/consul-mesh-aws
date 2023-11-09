@@ -1,4 +1,4 @@
-# Create a VPC 
+# Create a VPC
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "~> 4.0"

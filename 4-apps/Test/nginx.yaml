@@ -19,6 +19,8 @@ spec:
         image: nginx:stable-alpine
         ports:
         - containerPort: 80
+      nodeSelector:
+        nodegroup: consul-data-plane
 ---
 apiVersion: v1
 kind: Service

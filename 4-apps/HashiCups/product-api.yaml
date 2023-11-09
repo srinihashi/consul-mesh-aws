@@ -3,7 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: product-api
-  namespace: default
+  namespace: hashicups
   labels:
     app: product-api
 spec:
@@ -20,22 +20,22 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: product-api
-  namespace: default
+  namespace: hashicups
 automountServiceAccountToken: true
 ---
-apiVersion: consul.hashicorp.com/v1alpha1
-kind: ServiceDefaults
-metadata:
-  name: product-api
-  namespace: default
-spec:
-  protocol: "http"
----
+#apiVersion: consul.hashicorp.com/v1alpha1
+#kind: ServiceDefaults
+#metadata:
+#  name: product-api
+#  namespace: hashicups
+#spec:
+#  protocol: "http"
+#---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: db-configmap
-  namespace: default
+  namespace: hashicups
 data:
   config: |
     {
@@ -48,7 +48,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: product-api
-  namespace: default
+  namespace: hashicups
   labels:
     app: product-api
 spec:
@@ -60,8 +60,8 @@ spec:
     metadata:
       labels:
         app: product-api
-      annotations:
-        consul.hashicorp.com/connect-inject: "true"
+#      annotations:
+#        consul.hashicorp.com/connect-inject: "true"
     spec:
       serviceAccountName: product-api
       volumes:
@@ -93,3 +93,5 @@ spec:
             - name: config
               mountPath: /config
               readOnly: true
+      nodeSelector:
+        nodegroup: consul-data-plane
