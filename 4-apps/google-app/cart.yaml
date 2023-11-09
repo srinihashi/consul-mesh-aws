@@ -1,3 +1,10 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: cartservice
+automountServiceAccountToken: true
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -11,6 +18,7 @@ spec:
       labels:
         app: cartservice
     spec:
+      serviceAccountName: cartservice
       containers:
       - name: server
         image: gcr.io/google-samples/microservices-demo/cartservice:v0.8.0

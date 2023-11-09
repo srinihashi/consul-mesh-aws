@@ -1,3 +1,10 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: adservice
+automountServiceAccountToken: true
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -10,9 +17,8 @@ spec:
     metadata:
       labels:
         app: adservice
-      annotations: # CONSUL
-        consul.hashicorp.com/connect-inject: 'true' # CONSUL
     spec:
+      serviceAccountName: adservice
       containers:
       - name: server
         image: gcr.io/google-samples/microservices-demo/adservice:v0.8.0

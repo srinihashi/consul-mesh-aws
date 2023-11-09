@@ -47,3 +47,8 @@ connectInject:
   TransparentProxy: 
     enabled: true # If true, the sidecar will be configured to use a transparent proxy.
   
+# MeshGateway is a Consul Connect feature that allows for terminating TLS
+meshGateway:
+  enabled: true # If true, the Mesh Gateway will be installed.
+  replicas: 1 # Number of Mesh Gateway replicas to run.
+

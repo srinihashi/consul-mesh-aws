@@ -1,3 +1,10 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: checkoutservice
+automountServiceAccountToken: true
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -11,6 +18,7 @@ spec:
       labels:
         app: checkoutservice
     spec:
+      serviceAccountName: checkoutservice
       containers:
         - name: server
           image: gcr.io/google-samples/microservices-demo/checkoutservice:v0.8.0

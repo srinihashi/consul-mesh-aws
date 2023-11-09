@@ -1,3 +1,10 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: cartservice
+automountServiceAccountToken: true
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -12,7 +19,9 @@ spec:
         app: cartservice
       annotations: # CONSUL
         consul.hashicorp.com/connect-inject: 'true' # CONSUL
+        consul.hashicorp.com/connect-service-upstreams: 'redis-cart:6379' # CONSUL
     spec:
+      serviceAccountName: cartservice
       containers:
       - name: server
         image: gcr.io/google-samples/microservices-demo/cartservice:v0.8.0
@@ -20,7 +29,8 @@ spec:
         - containerPort: 7070
         env:
         - name: REDIS_ADDR
-          value: "redis-cart:6379"
+          value: "localhost:6379" # CONSUL
+          #value: "redis-cart:6379"
 
 ---
 apiVersion: v1

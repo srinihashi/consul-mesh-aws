@@ -1,3 +1,4 @@
+---
 apiVersion: consul.hashicorp.com/v1alpha1
 kind: ServiceResolver
 metadata:
@@ -8,3 +9,15 @@ spec:
     '*':
       targets:
         - peer: 'aks'
+---
+apiVersion: consul.hashicorp.com/v1alpha1
+kind: ServiceResolver
+metadata:
+  name: paymentservice
+spec:
+  connectTimeout: 15s
+  failover:
+    '*':
+      targets:
+        - peer: 'aks'
+---

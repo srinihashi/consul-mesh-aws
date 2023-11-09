@@ -1,3 +1,10 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: paymentservice
+automountServiceAccountToken: true
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -10,7 +17,10 @@ spec:
     metadata:
       labels:
         app: paymentservice
+      annotations: # CONSUL
+        consul.hashicorp.com/connect-inject: 'true' #CONSUL
     spec:
+      serviceAccountName: paymentservice
       containers:
       - name: server
         image: gcr.io/google-samples/microservices-demo/paymentservice:v0.8.0

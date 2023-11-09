@@ -1,3 +1,10 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: productcatalogservice
+automountServiceAccountToken: true
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -13,6 +20,7 @@ spec:
       annotations: #CONSUL
         consul.hashicorp.com/connect-inject: 'true' #CONSUL
     spec:
+      serviceAccountName: productcatalogservice
       containers:
       - name: server
         image: gcr.io/google-samples/microservices-demo/productcatalogservice:v0.8.0

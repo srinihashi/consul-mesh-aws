@@ -1,3 +1,10 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: redis-cart
+automountServiceAccountToken: true
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -13,6 +20,7 @@ spec:
       annotations: # CONSUL
         consul.hashicorp.com/connect-inject: 'true' # CONSUL
     spec:
+      serviceAccountName: redis-cart
       containers:
       - name: redis
         image: redis:alpine

@@ -1,4 +1,10 @@
 ---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: emailservice
+automountServiceAccountToken: true
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -11,9 +17,8 @@ spec:
     metadata:
       labels:
         app: emailservice
-      annotations: # CONSUL 
-        consul.hashicorp.com/connect-inject: 'true' # CONSUL 
     spec:
+      serviceAccountName: emailservice
       containers:
       - name: server
         image: gcr.io/google-samples/microservices-demo/emailservice:v0.8.0

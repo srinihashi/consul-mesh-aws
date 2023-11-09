@@ -1,40 +1,46 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: adservice
+automountServiceAccountToken: true
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: shippingservice
+  name: adservice
 spec:
   selector:
     matchLabels:
-      app: shippingservice
+      app: adservice
   template:
     metadata:
       labels:
-        app: shippingservice
+        app: adservice
       annotations: # CONSUL
         consul.hashicorp.com/connect-inject: 'true' # CONSUL
     spec:
+      serviceAccountName: adservice
       containers:
       - name: server
-        image: gcr.io/google-samples/microservices-demo/shippingservice:v0.8.0
+        image: gcr.io/google-samples/microservices-demo/adservice:v0.8.0
         ports:
-        - containerPort: 50052
+        - containerPort: 9555
         env:
         - name: PORT
-          value: "50052"
-        - name: DISABLE_PROFILER
-          value: "1"
+          value: "9555"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: shippingservice
+  name: adservice
 spec:
   type: ClusterIP
   selector:
-    app: shippingservice
+    app: adservice
   ports:
   - protocol: TCP
-    port: 50052
-    targetPort: 50052
+    port: 9555
+    targetPort: 9555
 
 ---
